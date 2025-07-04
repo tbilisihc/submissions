@@ -28,7 +28,7 @@ A simple web application to handle submissions for Tbilisi Hack Club events. It 
 
 1.  **Clone the repository:**
     ```bash
-    git clone [https://github.com/tbilisihc/submissions.git](https://github.com/tbilisihc/submissions.git)
+    git clone https://github.com/tbilisihc/submissions.git
     ```
 2.  **Install dependencies:**
     ```bash
@@ -94,4 +94,4 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 ## License
 
-[ISC](https://opensource.org/licenses/ISC)
+[Unlicense](LICENSE)
