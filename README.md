@@ -1,6 +1,6 @@
 # Tbilisi Hack Club Submissions
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/a1b2c3d4-e5f6-4a5b-9c8d-7e6f5g4h3i2j/deploy-status)](https://app.netlify.com/sites/your-site-name/deploys)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/001a03d0-91cb-4b30-8202-975f90ceff6f/deploy-status)](https://app.netlify.com/projects/submissions-tbilisihc/deploys)
 [![License: Unlisence](https://img.shields.io/badge/License-Unlicense-blue.svg)](https://opensource.org/licenses/Unlicense)
 
 A simple web application to handle submissions for Tbilisi Hack Club events. It features a frontend to display submissions and a backend powered by Netlify Functions and Supabase to manage the data.
