@@ -20,18 +20,18 @@ export default async function handler(req, res) {
 
   try {
     // --- Validate Input ---
-    const { text, author_name } = req.body;
+    const { name, email, phone } = req.body;
     if (!text) {
       return res.status(400).json({ error: "The 'text' field is required." });
     }
 
     // --- Insert Data into Database ---
     const { data, error } = await supabaseClient
-      .from("Appreciations")
+      .from("submissions")
       .insert({
-        text: text,
-        // Set to null if author_name is not provided
-        author_name: author_name || null,
+        name: name,
+        phone: phone,
+        email: email
       })
       .select()
       .single(); // .single() ensures we get a single object back, not an array

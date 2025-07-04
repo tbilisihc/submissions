@@ -22,8 +22,8 @@ export default async function handler(req, res) {
   try {
     // --- Fetch data from the 'Appreciations' table ---
     const { data, error } = await supabaseClient
-      .from('Appreciations')
-      .select('text, author_name')
+      .from('submissions')
+      .select('email, phone, name')
       .order('created_at', { ascending: false });
 
     if (error) {
