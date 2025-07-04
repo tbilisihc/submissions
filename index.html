@@ -164,7 +164,7 @@
                     try {
                         // UPDATED URL: Points directly to the Netlify function path
                         const response = await fetch(
-                            "/netlify/functions/read-submissions",
+                            "/.netlify/functions/read-submissions",
                         );
                         if (!response.ok) {
                             throw new Error(
