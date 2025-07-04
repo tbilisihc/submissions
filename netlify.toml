@@ -1,10 +1,10 @@
 [[headers]]
-# Apply these headers to all routes under /api/
-for = "/api/*"
+# Apply these headers to all functions
+for = "/.netlify/functions/*"
 [headers.values]
-# Allow requests from any origin
+# Allow requests from any origin (you can restrict this to your domain in production)
 Access-Control-Allow-Origin = "*"
-# Specify allowed HTTP methods
+# Specify allowed HTTP methods, including the preflight OPTIONS method
 Access-Control-Allow-Methods = "GET, POST, OPTIONS"
 # Specify allowed request headers
 Access-Control-Allow-Headers = "authorization, x-client-info, apikey, content-type"
