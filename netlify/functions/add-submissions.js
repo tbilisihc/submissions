@@ -1,38 +1,53 @@
 import { createClient } from '@supabase/supabase-js';
 
 // --- Initialize Supabase Client ---
-// This is done outside the handler to be reused across warm function invocations.
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
 
-// Ensure Supabase credentials are provided
 if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error("Server configuration error: Missing Supabase URL or Key.");
 }
 
 const supabaseClient = createClient(supabaseUrl, supabaseAnonKey);
 
-// --- Netlify Function Handler for POST requests ---
+// --- Define CORS Headers ---
+// These headers allow requests from any origin.
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'Content-Type',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS'
+};
+
+// --- Netlify Function Handler ---
 export async function handler(event, context) {
+  // --- Handle preflight OPTIONS request ---
+  // The browser sends this automatically before the actual POST request to check for CORS permissions.
+  if (event.httpMethod === 'OPTIONS') {
+    return {
+      statusCode: 204, // 204 No Content is standard for preflight responses
+      headers: corsHeaders,
+      body: ''
+    };
+  }
+
   // --- Ensure the request is a POST request ---
   if (event.httpMethod !== 'POST') {
     return {
       statusCode: 405,
-      headers: { 'Allow': 'POST' },
+      headers: corsHeaders, // Include CORS headers in error responses
       body: JSON.stringify({ error: `Method ${event.httpMethod} Not Allowed` }),
     };
   }
 
   try {
     // --- Parse the request body ---
-    // The event.body is a string, so it must be parsed into a JSON object.
     const { name, email, phone } = JSON.parse(event.body);
 
     // --- Validate Input ---
-    // Ensure the most critical fields are present.
     if (!name || !email) {
       return {
         statusCode: 400,
+        headers: corsHeaders, // Include CORS headers
         body: JSON.stringify({ error: "The 'name' and 'email' fields are required." }),
       };
     }
@@ -40,11 +55,7 @@ export async function handler(event, context) {
     // --- Insert Data into Database ---
     const { data, error } = await supabaseClient
       .from("submissions")
-      .insert({
-        name: name,
-        phone: phone,
-        email: email
-      })
+      .insert({ name, phone, email })
       .select()
       .single();
 
@@ -53,6 +64,7 @@ export async function handler(event, context) {
       console.error("DATABASE INSERT ERROR:", error);
       return {
         statusCode: 500,
+        headers: corsHeaders, // Include CORS headers
         body: JSON.stringify({
           error: "Database operation failed.",
           details: error.message,
@@ -62,18 +74,18 @@ export async function handler(event, context) {
     }
 
     // --- Return Success Response ---
-    // 201 Created is the correct status code for a successful POST.
     return {
       statusCode: 201,
-      headers: { 'Content-Type': 'application/json' },
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }, // Combine CORS and content-type headers
       body: JSON.stringify(data),
     };
 
   } catch (err) {
-    // --- Handle Unexpected Errors (e.g., JSON parsing) ---
+    // --- Handle Unexpected Errors ---
     console.error("UNEXPECTED ERROR:", err);
     return {
       statusCode: 500,
+      headers: corsHeaders, // Include CORS headers
       body: JSON.stringify({ error: "An unexpected server error occurred.", details: err.message }),
     };
   }
