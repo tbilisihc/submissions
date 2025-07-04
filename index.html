@@ -162,7 +162,10 @@
                 // Main function to fetch and render data
                 const fetchAndRenderSubmissions = async () => {
                     try {
-                        const response = await fetch("/api/read-submissions");
+                        // UPDATED URL: Points directly to the Netlify function path
+                        const response = await fetch(
+                            "/netlify/functions/read-submissions",
+                        );
                         if (!response.ok) {
                             throw new Error(
                                 `Network response was not ok. Status: ${response.status}`,
